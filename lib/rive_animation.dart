@@ -37,6 +37,9 @@ class _RiveAnimation extends State<RiveAnimation> {
   /// The view model instance to update
   ViewModelInstance? _model;
 
+  // Has initialisation been started
+  bool _init = false;
+
   @override
   didUpdateWidget(prev) {
     // Sync all incoming data with the rive view models
@@ -58,7 +61,10 @@ class _RiveAnimation extends State<RiveAnimation> {
     try {
       // Load the file if it hasn't been loaded yet
       if (_controller == null) {
-        unawaited(_initRive());
+        if (!_init) {
+          _init = true;
+          unawaited(_initRive());
+        }
 
         // Wait for the file to load
         return SizedBox.shrink();
@@ -115,28 +121,28 @@ class _RiveAnimation extends State<RiveAnimation> {
         case String x:
           final prop = _model?.string(entry.key);
           if (prop == null) {
-            print('RIVE no property: $type ${entry.key}');
+            print('RIVE no $type property: ${entry.key}');
             continue;
           }
           prop.value = x;
         case double x:
           final prop = _model?.number(entry.key);
           if (prop == null) {
-            print('RIVE no property: $type ${entry.key}');
+            print('RIVE no $type property: ${entry.key}');
             continue;
           }
           prop.value = x;
         case int x:
           final prop = _model?.number(entry.key);
           if (prop == null) {
-            print('RIVE no property: $type ${entry.key}');
+            print('RIVE no $type property: ${entry.key}');
             continue;
           }
           prop.value = x.toDouble();
         case bool x:
           final prop = _model?.boolean(entry.key);
           if (prop == null) {
-            print('RIVE no property: $type ${entry.key}');
+            print('RIVE no $type property: ${entry.key}');
             continue;
           }
           prop.value = x;

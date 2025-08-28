@@ -56,13 +56,41 @@ class _RiveItem extends State<RiveItem> {
 
   @override
   build(context) {
-    return RiveAnimation(
-      src: 'assets/animations/card.riv',
-      artboard: widget.artboard,
-      machine: widget.machine,
-      model: widget.model,
-      data: _data,
-      images: widget.images,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Artboard: ${widget.artboard}'),
+              Text('Machine: ${widget.machine}'),
+              Text('Model: ${widget.model}'),
+              Text('Color: ${_data['Color']}'),
+              Text('Number: ${_data['Number']}'),
+              Text('Cards Count: ${_data['Cards Count']}'),
+              Text('Min Form: ${_data['Min Form']}'),
+              Text('Max Form: ${_data['Max Form']}'),
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: SizedBox(
+            height: 200,
+            width: 120,
+            child: RiveAnimation(
+              src: 'assets/animations/card2.riv',
+              artboard: widget.artboard,
+              machine: widget.machine,
+              model: widget.model,
+              data: _data,
+              images: widget.images,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
