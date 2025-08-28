@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:rive/rive.dart';
 
 class RiveAnimation extends StatefulWidget {
@@ -40,6 +41,14 @@ class _RiveAnimation extends State<RiveAnimation> {
   // Has initialisation been started
   bool _init = false;
 
+  /// Supported font names
+  static const _fonts = [
+    'fieldgothic-no27',
+    'fieldgothic-no37',
+    'fieldgothic-no52',
+    'fieldgothic-no54',
+  ];
+
   @override
   didUpdateWidget(prev) {
     // Sync all incoming data with the rive view models
@@ -60,15 +69,13 @@ class _RiveAnimation extends State<RiveAnimation> {
   build(context) {
     try {
       // Load the file if it hasn't been loaded yet
-      if (_controller == null) {
-        if (!_init) {
-          _init = true;
-          unawaited(_initRive());
-        }
-
-        // Wait for the file to load
-        return SizedBox.shrink();
+      if (!_init) {
+        _init = true;
+        unawaited(_initRive());
       }
+
+      // Wait for the file to load
+      if (_controller == null) return SizedBox.shrink();
 
       // Return the animation
       return RiveWidget(controller: _controller!, fit: Fit.contain);
@@ -82,7 +89,11 @@ class _RiveAnimation extends State<RiveAnimation> {
   Future<void> _initRive() async {
     try {
       // Load the rive file
-      _file ??= await File.asset(widget.src, riveFactory: Factory.rive);
+      _file ??= await File.asset(
+        widget.src,
+        riveFactory: Factory.rive,
+        assetLoader: _loader,
+      );
 
       // Initialise the controller with the file
       final artboard = widget.artboard;
@@ -163,5 +174,44 @@ class _RiveAnimation extends State<RiveAnimation> {
 
     // Bind the view model instance to the state machine
     _controller?.dataBind(DataBind.byInstance(_model!));
+  }
+
+  /// Load referenced assets from resources.
+  bool _loader(FileAsset asset, Uint8List? bytes) => switch (asset) {
+    // AudioAsset x => _setAudio(x),
+    FontAsset x => _setFont(x),
+    _ => false,
+  };
+
+  /// Load a font asset
+  bool _setFont(FontAsset asset) {
+    // Clean the font name
+    final name = asset.name.replaceAll(' ', '');
+
+    // Check if font is supported
+    if (!_fonts.contains(name)) {
+      print('RIVE font not supported: ${asset.name}');
+      return false;
+    }
+
+    // Load the font data
+    rootBundle.load('assets/fonts/$name.otf').then((data) async {
+      if (mounted) {
+        final list = data.buffer.asUint8List();
+
+        // Decode the font data
+        final font = await Factory.rive.decodeFont(list);
+        if (font == null) return;
+
+        // Set the font asset in rive
+        asset.font(font);
+
+        // Force rebuild in case the rive animation is no longer advancing
+        setState(() {});
+      }
+    });
+
+    // Tell the runtime not to load the asset automatically
+    return true;
   }
 }

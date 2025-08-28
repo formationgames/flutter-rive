@@ -25,4 +25,5 @@ flutter:
   assets:
     - assets/animations/
     - assets/compressed/
+    - assets/fonts/
     - assets/images/
