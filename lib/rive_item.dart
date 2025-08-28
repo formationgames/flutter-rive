@@ -47,11 +47,11 @@ class _RiveItem extends State<RiveItem> {
 
   // Randomise the data to inject
   void _randomiseData() {
-    _data['Color'] = r.nextInt(5);
+    _data['Color'] = r.nextInt(6);
     _data['Number'] = r.nextInt(30) + 65;
-    _data['Cards Count'] = r.nextInt(2) + 1;
-    _data['Min Form'] = r.nextInt(2) + 2;
-    _data['Max Form'] = r.nextInt(1) + 4;
+    _data['Cards Count'] = r.nextInt(3) + 1;
+    _data['Min Form'] = r.nextInt(3) + 2;
+    _data['Max Form'] = r.nextInt(2) + 4;
   }
 
   @override
@@ -80,13 +80,15 @@ class _RiveItem extends State<RiveItem> {
           child: SizedBox(
             height: 200,
             width: 120,
-            child: RiveAnimation(
-              src: 'assets/animations/card2.riv',
-              artboard: widget.artboard,
-              machine: widget.machine,
-              model: widget.model,
-              data: _data,
-              images: widget.images,
+            child: RepaintBoundary(
+              child: RiveAnimation(
+                src: 'assets/animations/card2.riv',
+                artboard: widget.artboard,
+                machine: widget.machine,
+                model: widget.model,
+                data: _data,
+                images: widget.images,
+              ),
             ),
           ),
         ),

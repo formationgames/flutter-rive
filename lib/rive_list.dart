@@ -74,12 +74,12 @@ class _RiveList extends State<RiveList> {
   build(context) {
     // Dynamically resolve images
     final images = _resolveImages({
-      'base': 'assets/images/base.png',
-      'core': 'assets/images/core.png',
-      'elite': 'assets/images/elite.png',
-      'rare': 'assets/images/rare.png',
-      'star': 'assets/images/star.png',
-      'superstar': 'assets/images/superstar.png',
+      'base': 'assets/compressed/base.webp',
+      'core': 'assets/compressed/core.webp',
+      'elite': 'assets/compressed/elite.webp',
+      'rare': 'assets/compressed/rare.webp',
+      'star': 'assets/compressed/star.webp',
+      'superstar': 'assets/compressed/superstar.webp',
     });
 
     // Build list of animations
@@ -88,10 +88,10 @@ class _RiveList extends State<RiveList> {
         children: [
           Text('BIG'),
           RiveItem(artboard: 'Main Big', model: 'Main', images: images),
-          // Text('MID'),
-          // RiveItem(artboard: 'Main Mid', model: 'Main', images: images),
-          // Text('SML'),
-          // RiveItem(artboard: 'Main Small', model: 'Main', images: images),
+          Text('MID'),
+          RiveItem(artboard: 'Main Mid', model: 'Main', images: images),
+          Text('SML'),
+          RiveItem(artboard: 'Main Small', model: 'Main', images: images),
         ],
       ),
     );
