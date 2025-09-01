@@ -82,7 +82,7 @@ class _RiveItem extends State<RiveItem> {
             width: 120,
             child: RepaintBoundary(
               child: RiveAnimation(
-                src: 'assets/animations/card2.riv',
+                src: 'assets/animations/card.riv',
                 artboard: widget.artboard,
                 machine: widget.machine,
                 model: widget.model,
